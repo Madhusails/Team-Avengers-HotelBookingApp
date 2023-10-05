@@ -1,0 +1,40 @@
+﻿@page
+@model HotelBookingApp.Pages.PersonalInfoModel
+@{
+}
+<form method="post">
+    <h3 class="display-5 text-center mb-5">Personal Information Page</h3>
+    <div class="form-group mb-3">
+        <label for="RoomType">Room Type</label>
+        <input type="text" class="form-control" name="RoomType" id="RoomType" value="@TempData["RoomType"]" readonly />
+    </div>
+    <div class="form-group mb-3">
+        <label for="Name">Name</label>
+        <input type="text" class="form-control" name="Name" id="Name"  placeholder="Enter Name" required>
+
+    </div>
+    <div class="form-group mb-3">
+        <label for="Age">Age</label>
+        <input type="number" class="form-control" name="Age" id="Age"  placeholder="Enter Age" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="No_of_guests">No Of Guests</label>
+        <input type="number" class="form-control" name="No_of_guests" id="No_of_guests" placeholder="No of guests" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="No_of_rooms">No Of Rooms</label>
+        <input type="number" class="form-control" name="No_of_rooms" id="No_of_rooms" placeholder="No Of Rooms" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="checkin">Check-in Date</label>
+        <input type="date" class="form-control" name="checkin" id="checkin" placeholder="Check-in Date" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="checkout">Check-out Date</label>
+        <input type="date" class="form-control" name="checkout" id="checkout" placeholder="Check-out Date" required>
+    </div>
+    <div>
+        <input type="submit" value="Book Now" class="btn btn-primary" />
+        
+    </div>
+</form>
