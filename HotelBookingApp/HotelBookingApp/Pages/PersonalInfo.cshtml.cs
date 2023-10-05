@@ -32,11 +32,20 @@ namespace HotelBookingApp.Pages
         {
             try
             {
-                await _registrationRepository.AddUserInfo(userInfo);
-                ModelState.Clear();
+                var rooms = _registrationRepository.GetAllRooms(RoomType, Checkin,Checkout);
+                if(rooms!=null)
+                {
+                    await _registrationRepository.AddUserInfo(userInfo);
+                    ModelState.Clear();
 
-                await _registrationRepository.UpdateRoomInfo(No_of_rooms, Checkin, Checkout, RoomType);
-                return RedirectToPage("Success");
+                    await _registrationRepository.UpdateRoomInfo(No_of_rooms, Checkin, Checkout, RoomType);
+                    return RedirectToPage("Success");
+                }
+                else
+                {
+                    TempData["Message"] = "Rooms Not Available";
+                    return RedirectToPage("Failure");
+                }
             }
             catch (Exception ex)
             {
