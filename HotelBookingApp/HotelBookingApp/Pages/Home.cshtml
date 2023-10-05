@@ -1,0 +1,104 @@
+﻿@page 
+@model HotelBookingApp.Pages.HomeModel
+@{
+}
+
+<h1>Welcome to our Hotel Booking App</h1>
+
+<form class="form-inline" method="post" asp-asp-page="PersonalInfo" >
+    <div class="new-one">
+        <div class="form-group mb-2 one">
+            <label for="roomType">Room Type:</label>
+            <select name="RoomType" class="form-control w-250" asp-for="RoomType" Required>
+                <option value="Select RoomType">Select RoomType</option>
+                <option value="AC">AC</option>
+                <option value="Non-AC">Non-AC</option>
+                <option value="AC Deluxe">AC-Deluxe</option>
+                <option value="Suit Room">Suit rooms</option>
+            </select>
+        </div>
+
+        <div class="form-group mb-2 one">
+            <label for="checkInDate">Check-In Date:</label>
+            <input type="date" name="Checkin" class="form-control w-250" asp-for="Checkin" Required>
+        </div>
+
+        <div class="form-group mb-2 one">
+            <label for="checkOutDate">Check-Out Date:</label>
+            <input type="date" name="Checkout" class="form-control w-250" asp-for="Checkout" Required>
+        </div>
+        <div class="form-group mb-2 one-1">
+            <label></label>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+    
+</form>
+
+@if (Model.RoomInfoList != null)
+{
+    
+    <table align="center">
+        <thead>
+            <tr>
+                <th>Room Number</th>
+                <th>Room Type</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RoomInfoList != null)
+            {
+                foreach (var room in Model.RoomInfoList)
+                {
+                    <tr>
+                        <td>@room.RoomNumber</td>
+                        <td>@room.RoomType</td>
+                    </tr>
+                }
+           
+            }
+        
+        </tbody>
+   
+    </table>
+
+
+    <div>
+        <a href="PersonalInfo" class="btn btn-primary one-1">NEXT</a>
+    </div>
+}
+else
+{
+    <p>Please choose room type, checkin and checkout date and click on filter to get the available rooms</p>
+}
+@*
+<table align="center">
+    <thead>
+        <tr>
+            <th>Room Number</th>
+            <th>Room Type</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.RoomInfoList != null)
+        {
+            foreach (var room in Model.RoomInfoList)
+            {
+                <tr>
+                    <td>@room.RoomNumber</td>
+                    <td>@room.RoomType</td>
+                </tr>
+            }
+
+        }
+
+    </tbody>
+
+</table>
+
+
+<div>
+    <a href="PersonalInfo" class="btn btn-primary">NEXT</a>
+</div> *@
