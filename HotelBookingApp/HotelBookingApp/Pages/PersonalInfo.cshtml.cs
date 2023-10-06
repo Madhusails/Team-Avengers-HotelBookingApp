@@ -24,10 +24,21 @@ namespace HotelBookingApp.Pages
         }
         public async Task<IActionResult> OnPost(UserInfoModel user)
         {
-            await _apiService.AddUserInfo(user, TempData["RoomType"].ToString());
-            ModelState.Clear();
+            DateTime checkin = (DateTime)TempData["Checkin"];
+            DateTime checkout = (DateTime)TempData["Checkout"];
+            if (checkin <= user.Checkin && checkout >= user.Checkout && checkin <= checkout && user.Checkin <= user.Checkout)
+            {
+                await _apiService.AddUserInfo(user, TempData["RoomType"].ToString());
+                ModelState.Clear();
+                return RedirectToPage("Success");
+            }
+            else
+            {
+                TempData["Message"] = "Booking dates not matched with available dates";
+                return RedirectToPage("Failure");
+            }
 
-            return RedirectToPage("Success");
+           
 
         }
     }

@@ -39,7 +39,14 @@ namespace HotelBookingApp.Pages
         {
             TempData["RoomType"] = roomInfo.RoomType; // Assuming RoomType is a property of roomInfo
             TempData.Keep("RoomType");
+
+            TempData["CheckIn"] = roomInfo.Checkin; 
+            TempData.Keep("CheckIn");
+            
+            TempData["CheckOut"] = roomInfo.Checkout; 
+            TempData.Keep("CheckOut");
             RoomInfoList = await _apiService.GetAllRooms(roomInfo.RoomType, roomInfo.Checkin, roomInfo.Checkout);
+            
             if (!string.IsNullOrEmpty(RoomType))
             {
                 RoomInfoList = RoomInfoList
