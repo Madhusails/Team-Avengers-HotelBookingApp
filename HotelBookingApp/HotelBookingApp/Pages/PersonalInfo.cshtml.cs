@@ -1,3 +1,4 @@
+using HotelBooking.API.APIServices.cs;
 using HotelBooking.API.Models;
 using HotelBookingApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -7,51 +8,37 @@ namespace HotelBookingApp.Pages
 {
     public class PersonalInfoModel : PageModel
     {
-        private readonly IRegistrationRepository _registrationRepository;
-        public PersonalInfoModel(IRegistrationRepository _registrationRepository)
+        private readonly IApiService _apiService;
+        public string roomType { get; set; }
+        public PersonalInfoModel(IApiService _apiService)
         {
-            this._registrationRepository = _registrationRepository;
+            this._apiService = _apiService;
         }
 
-        [BindProperty]
-        public int No_of_rooms { get; set; }
-
-        [BindProperty]
-        public DateTime Checkin { get; set; }
-
-        [BindProperty]
-        public DateTime Checkout { get; set; }
-        [BindProperty]
-        public string RoomType { get; set; }
+        
         public void OnGet()
         {
-           
-            
+            if (TempData.ContainsKey("RoomType"))
+                 roomType = TempData["RoomType"].ToString();
+            TempData.Keep("RoomType");
         }
-        public async Task<IActionResult> OnPost(UserInfo userInfo)
+        public async Task<IActionResult> OnPost(UserInfoModel user)
         {
-            try
+            DateTime checkin = (DateTime)TempData["Checkin"];
+            DateTime checkout = (DateTime)TempData["Checkout"];
+            if (checkin <= user.Checkin && checkout >= user.Checkout && checkin <= checkout && user.Checkin <= user.Checkout)
             {
-                var rooms = _registrationRepository.GetAllRooms(RoomType, Checkin,Checkout);
-                if(rooms!=null)
-                {
-                    await _registrationRepository.AddUserInfo(userInfo);
-                    ModelState.Clear();
-
-                    await _registrationRepository.UpdateRoomInfo(No_of_rooms, Checkin, Checkout, RoomType);
-                    return RedirectToPage("Success");
-                }
-                else
-                {
-                    TempData["Message"] = "Rooms Not Available";
-                    return RedirectToPage("Failure");
-                }
+                await _apiService.AddUserInfo(user, TempData["RoomType"].ToString());
+                ModelState.Clear();
+                return RedirectToPage("Success");
             }
-            catch (Exception ex)
+            else
             {
-                TempData["Message"] = ex.Message;
+                TempData["Message"] = "Booking dates not matched with available dates";
                 return RedirectToPage("Failure");
             }
+
+           
 
         }
     }

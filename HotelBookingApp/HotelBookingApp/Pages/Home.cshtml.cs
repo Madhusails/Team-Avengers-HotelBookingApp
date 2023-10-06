@@ -1,3 +1,4 @@
+using HotelBooking.API.APIServices.cs;
 using HotelBooking.API.Models;
 using HotelBookingApp.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -9,11 +10,10 @@ namespace HotelBookingApp.Pages
    /* [Authorize]*/
     public class HomeModel : PageModel
     {
-        private readonly IRegistrationRepository _registrationRepository;
-
-        public HomeModel(IRegistrationRepository registrationRepository)
+        private readonly IApiService _apiService;
+        public HomeModel(IApiService _apiService)
         {
-            _registrationRepository = registrationRepository;
+            this._apiService = _apiService;
         }
         [BindProperty]
         public string RoomType { get; set; }
@@ -35,26 +35,25 @@ namespace HotelBookingApp.Pages
 
 
         }
-        public async void OnPost()
+        public async Task OnPost(RoomInfo roomInfo)
         {
-            TempData["RoomType"] = RoomType;
-            RoomInfoList = await _registrationRepository.GetAllRooms(RoomType, Checkin, Checkout);
-            /*TempData["roomList"] = RoomInfoList;*/
+            TempData["RoomType"] = roomInfo.RoomType; // Assuming RoomType is a property of roomInfo
+            TempData.Keep("RoomType");
+
+            TempData["CheckIn"] = roomInfo.Checkin; 
+            TempData.Keep("CheckIn");
+            
+            TempData["CheckOut"] = roomInfo.Checkout; 
+            TempData.Keep("CheckOut");
+            RoomInfoList = await _apiService.GetAllRooms(roomInfo.RoomType, roomInfo.Checkin, roomInfo.Checkout);
+            
             if (!string.IsNullOrEmpty(RoomType))
             {
                 RoomInfoList = RoomInfoList
                     .Where(p => p.RoomType.Contains(RoomType, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
-            if (RoomInfoList != null && RoomInfoList.Any())
-            {
-                ShowTable = true;
-            }
-            else
-            {
-                ShowTable = false;
-            }
-            
         }
+
     }
 }

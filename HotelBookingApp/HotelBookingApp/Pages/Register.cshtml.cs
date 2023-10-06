@@ -1,3 +1,4 @@
+using HotelBooking.API.APIServices.cs;
 using HotelBooking.API.Models;
 using HotelBookingApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -7,17 +8,17 @@ namespace HotelBookingApp.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly IRegistrationRepository _registrationRepository;
-        public RegisterModel(IRegistrationRepository _registrationRepository)
+        private readonly IApiService _apiService;
+        public RegisterModel(IApiService _apiService)
         {
-            this._registrationRepository = _registrationRepository;
+            this._apiService = _apiService;
         }
         public void OnGet()
         {
         }
         public async Task<IActionResult> OnPost(RegisteredUsers user)
         {
-            await _registrationRepository.Create(user);
+            await _apiService.Register(user);
             ModelState.Clear();
 
             return RedirectToPage("Login");

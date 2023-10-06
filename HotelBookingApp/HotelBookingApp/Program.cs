@@ -1,3 +1,4 @@
+using HotelBooking.API.APIServices.cs;
 using HotelBookingApp.Data;
 using HotelBookingApp.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<HotelBookingDB>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("HotelBookingConnectionString")));
 builder.Services.AddScoped<IRegistrationRepository, SQLRegistrationRepository>();
+builder.Services.AddTransient<IApiService, ApiService>();
+builder.Services.AddHttpClient("WebAPI", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7259/");
+});
 
 var app = builder.Build();
 

@@ -1,3 +1,4 @@
+using HotelBooking.API.APIServices.cs;
 using HotelBooking.API.Models;
 using HotelBookingApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -7,34 +8,26 @@ namespace HotelBookingApp.Pages
 {
     public class LoginModel : PageModel
     {
-        private readonly IRegistrationRepository _registrationRepository;
+        
         [BindProperty]
         public string UserName { get; set; }
 
         [BindProperty]
         public string Password { get; set; }
-        public LoginModel(IRegistrationRepository registrationRepository)
+        private readonly IApiService _apiService;
+        public LoginModel(IApiService _apiService)
         {
-            _registrationRepository = registrationRepository;
+            this._apiService = _apiService;
         }
         public void OnGet()
         {
         }
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost(RegisteredUsers user)
         {
-            RegisteredUsers registeredUsers = _registrationRepository.GetUserByUsernameAndPassword(UserName, Password);
-            if (registeredUsers != null)
-            {
-
-                // Successful login, you can redirect or do something else here
-                return RedirectToPage("Home");
-            }
-
-            // Failed login, display an error message or handle it as needed
-            ModelState.AddModelError("", "Invalid username or password");
+            await _apiService.Login(user);
             ModelState.Clear();
 
-            return Page();
+            return RedirectToPage("Home");
         }
     }
 }
